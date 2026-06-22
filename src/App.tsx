@@ -17,9 +17,14 @@ class AmbientSynth {
   }
 
   public start() {
-    if (this.isPlaying) return;
     try {
-      this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      if (!this.ctx) {
+        this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+      if (this.ctx.state === "suspended") {
+        this.ctx.resume();
+      }
+      if (this.isPlaying) return;
       this.gainNode = this.ctx.createGain();
       this.gainNode.gain.setValueAtTime(0.08, this.ctx.currentTime); // Low background volume
       this.gainNode.connect(this.ctx.destination);
@@ -143,8 +148,9 @@ export default function App() {
     setErrorMsg(null);
     setScreen("loading");
     
-    // Auto-enable audio on first gesture
+    // Auto-enable audio on first gesture (synchronous call to allow AudioContext in browsers)
     setAudioPlaying(true);
+    synthRef.current?.start();
 
     try {
       const data = await fetchGithubWrapped(username);
@@ -160,7 +166,10 @@ export default function App() {
   const handleDemo = () => {
     setErrorMsg(null);
     setScreen("loading");
+    
+    // Auto-enable audio on first gesture (synchronous call to allow AudioContext in browsers)
     setAudioPlaying(true);
+    synthRef.current?.start();
 
     setTimeout(() => {
       const data = getDemoData();
@@ -210,7 +219,15 @@ export default function App() {
           onNext={handleNext}
           onRestart={handleRestart}
           audioPlaying={audioPlaying}
-          toggleAudio={() => setAudioPlaying((p) => !p)}
+          toggleAudio={() => {
+            const nextPlaying = !audioPlaying;
+            setAudioPlaying(nextPlaying);
+            if (nextPlaying) {
+              synthRef.current?.start();
+            } else {
+              synthRef.current?.stop();
+            }
+          }}
         />
       )}
     </div>

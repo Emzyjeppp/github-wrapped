@@ -255,31 +255,35 @@ export function SummarySlide({ data, onRestart }: SummarySlideProps) {
 
   return (
     <div className="flex flex-col items-center justify-center h-full p-4 sm:p-6 slide-enter overflow-y-auto">
-      {/* Wrapped Poster Container */}
+      {/* Outer Download Wrapper with solid background and padding to prevent dark corner artifacts */}
       <div
         ref={cardRef}
-        id="wrapped-summary-card"
-        className="w-full max-w-xs p-6 rounded-3xl bg-gradient-to-b from-slate-900 via-indigo-950/90 to-slate-950 border border-white/10 shadow-2xl relative overflow-hidden flex flex-col gap-5 text-left mb-6"
+        className="p-5 bg-[#030712] rounded-3xl flex items-center justify-center w-full max-w-xs mb-6 shadow-xl border border-white/5"
       >
-        {/* Background glow lines */}
-        <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-cyan-500/10 blur-2xl"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-purple-500/10 blur-2xl"></div>
+        {/* Wrapped Poster Container */}
+        <div
+          id="wrapped-summary-card"
+          className="w-full p-6 rounded-2xl bg-gradient-to-b from-slate-900 via-indigo-950/90 to-slate-950 border border-white/10 shadow-inner relative overflow-hidden flex flex-col gap-5 text-left"
+        >
+          {/* Background glow lines */}
+          <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-cyan-500/10 blur-2xl"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-purple-500/10 blur-2xl"></div>
 
-        {/* Poster Header */}
-        <div className="flex justify-between items-center border-b border-white/5 pb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20">
-              <img src={data.avatarUrl} alt={data.name} className="w-full h-full object-cover" />
+          {/* Poster Header */}
+          <div className="flex justify-between items-center border-b border-white/5 pb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20">
+                <img src={data.avatarUrl} alt={data.name} className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white line-clamp-1">@{data.username}</h4>
+                <p className="text-[9px] text-slate-400">My 2026 Code</p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-xs font-bold text-white line-clamp-1">@{data.username}</h4>
-              <p className="text-[9px] text-slate-400">My 2026 Code</p>
-            </div>
+            <span className="text-[9px] px-2 py-1 rounded bg-white/5 border border-white/10 font-bold uppercase tracking-wider text-cyan-400">
+              GITHUB WRAPPED
+            </span>
           </div>
-          <span className="text-[9px] px-2 py-1 rounded bg-white/5 border border-white/10 font-bold uppercase tracking-wider text-cyan-400">
-            GITHUB WRAPPED
-          </span>
-        </div>
 
         {/* Persona Highlight */}
         <div className="space-y-1">
@@ -340,6 +344,7 @@ export function SummarySlide({ data, onRestart }: SummarySlideProps) {
           Temukan milikmu di {displayUrl}
         </p>
       </div>
+    </div>
 
       {/* Action Buttons */}
       <div className="flex flex-col w-full max-w-xs gap-3">
